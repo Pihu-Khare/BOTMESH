@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bot Mesh - Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f0f12;
+      color: #fff;
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #1a1a1f;
+      border-right: 1px solid #333;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .sidebar-header {
+      text-align: center;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .user-info {
+      background: rgba(0, 209, 178, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 209, 178, 0.3);
+    }
+
+    .user-info p {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: #00d1b2;
+      margin-bottom: 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-link {
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 209, 178, 0.1);
+      color: #00d1b2;
+    }
+
+    .nav-link.active {
+      background: rgba(0, 209, 178, 0.2);
+      color: #00d1b2;
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      background: #ff6b6b;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .logout-btn:hover {
+      background: #ff5252;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      margin-bottom: 30px;
+    }
+
+    .page-header h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .page-header p {
+      color: #aaa;
+      font-size: 0.95rem;
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    /* Dashboard Section */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: #1a1a1f;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: #00d1b2;
+      box-shadow: 0 0 20px rgba(0, 209, 178, 0.2);
+    }
+
+    .stat-label {
+      color: #aaa;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00d1b2;
+    }
+
+    .start-chat-btn {
+      background: linear-gradient(135deg, #00d1b2, #00bfa5);
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .start-chat-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 209, 178, 0.4);
+    }
+
+    /* Sessions Section */
+    .sessions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .session-card {
+      background: #1a1a1f;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .session-card:hover {
+      border-color: #00d1b2;
+      box-shadow: 0 0 15px rgba(0, 209, 178, 0.1);
+    }
+
+    .session-info {
+      flex: 1;
+    }
+
+    .session-model {
+      font-weight: 600;
+      color: #00d1b2;
+      margin-bottom: 5px;
+    }
+
+    .session-meta {
+      color: #aaa;
+      font-size: 0.85rem;
+    }
+
+    .session-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-small {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-resume {
+      background: rgba(0, 209, 178, 0.2);
+      color: #00d1b2;
+      border: 1px solid #00d1b2;
+    }
+
+    .btn-resume:hover {
+      background: #00d1b2;
+      color: #000;
+    }
+
+    .btn-delete {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+      border: 1px solid #ff6b6b;
+    }
+
+    .btn-delete:hover {
+      background: #ff6b6b;
+      color: #fff;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #aaa;
+      padding: 40px;
+    }
+
+    .empty-state p {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    /* Settings Section */
+    .settings-form {
+      max-width: 500px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #ddd;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      background: #1a1a1f;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #00d1b2;
+    }
+
+    .loading {
+      text-align: center;
+      color: #aaa;
+      padding: 40px;
+    }
+
+    .spinner {
+      border: 3px solid rgba(0, 209, 178, 0.2);
+      border-top: 3px solid #00d1b2;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      display: none;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h1>🤖 Bot Mesh</h1>
+    </div>
+
+    <div class="user-info">
+      <p>Welcome back!</p>
+      <div class="user-name" id="userNameDisplay">Loading...</div>
+      <p id="userEmailDisplay" style="font-size: 0.75rem;">Loading...</p>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-link active" onclick="switchSection('dashboard')">📊 Dashboard</button>
+      <button class="nav-link" onclick="switchSection('chat')">💬 Start Chat</button>
+      <button class="nav-link" onclick="switchSection('sessions')">📋 Sessions</button>
+      <button class="nav-link" onclick="switchSection('settings')">⚙️ Settings</button>
+    </nav>
+
+    <button class="logout-btn" onclick="logout()">Sign Out</button>
+  </div>
+
+  <div class="main-content">
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section active">
+      <div class="page-header">
+        <h2>Dashboard</h2>
+        <p>Welcome to Bot Mesh. Start a new chat session or manage your existing ones.</p>
+      </div>
+
+      <button class="start-chat-btn" onclick="switchSection('chat')">🚀 Start New Chat Session</button>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Sessions</div>
+          <div class="stat-value" id="totalSessions">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Messages</div>
+          <div class="stat-value" id="totalMessages">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Spent</div>
+          <div class="stat-value" id="totalSpent">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">This Month</div>
+          <div class="stat-value" id="monthlySpent">$0.00</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 40px; margin-bottom: 20px;">Recent Sessions</h3>
+      <div id="recentSessions" class="sessions-list">
+        <div class="empty-state">
+          <p>No sessions yet. Start your first chat!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Section -->
+    <div id="chat" class="content-section">
+      <div class="page-header">
+        <h2>Start New Chat</h2>
+        <p>Select an AI model and begin your conversation.</p>
+      </div>
+
+      <div id="modelSelection" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading models...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sessions Section -->
+    <div id="sessions" class="content-section">
+      <div class="page-header">
+        <h2>Your Sessions</h2>
+        <p>View and manage all your chat sessions.</p>
+      </div>
+
+      <div id="sessionsList" class="sessions-list">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading sessions...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="content-section">
+      <div class="page-header">
+        <h2>Settings</h2>
+        <p>Manage your account and preferences.</p>
+      </div>
+
+      <div class="settings-form">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="settingsUsername" disabled>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="settingsEmail" disabled>
+        </div>
+
+        <div class="form-group">
+          <label>Member Since</label>
+          <input type="text" id="settingsMemberSince" disabled>
+        </div>
+
+        <h3 style="margin-top: 30px; margin-bottom: 20px;">API Key (for integrations)</h3>
+        <div class="form-group">
+          <label>Your API Key</label>
+          <input type="text" id="settingsApiKey" readonly value="Coming soon...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notification" id="notification"></div>
+
+  <script>
+    const API_URL = 'http://localhost:5000/api/v1';
+    let token = localStorage.getItem('token');
+    let user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    // Check authentication
+    if (!token) {
+      window.location.href = 'auth.html';
+    }
+
+    // Load user data
+    window.addEventListener('load', async () => {
+      document.getElementById('userNameDisplay').textContent = user.username || 'User';
+      document.getElementById('userEmailDisplay').textContent = user.email || 'user@example.com';
+      
+      document.getElementById('settingsUsername').value = user.username || '';
+      document.getElementById('settingsEmail').value = user.email || '';
+      document.getElementById('settingsMemberSince').value = new Date().toLocaleDateString();
+
+      loadSessions();
+      loadModels();
+    });
+
+    function switchSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.content-section').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      // Hide all nav links as active
+      document.querySelectorAll('.nav-link').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      // Show selected section
+      document.getElementById(sectionId).classList.add('active');
+
+      // Mark nav link as active
+      event.target.classList.add('active');
+    }
+
+    async function loadSessions() {
+      try {
+        const response = await fetch(`${API_URL}/sessions`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to load sessions');
+        }
+
+        displaySessions(data.sessions);
+        updateStats(data.sessions);
+      } catch (error) {
+        console.error('Error loading sessions:', error);
+        document.getElementById('sessionsList').innerHTML = `<div class="empty-state"><p>Error loading sessions. Try refreshing.</p></div>`;
+      }
+    }
+
+    function displaySessions(sessions) {
+      const container = document.getElementById('sessionsList');
+      const recentContainer = document.getElementById('recentSessions');
+
+      if (sessions.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No sessions yet. Start a chat to begin!</p></div>';
+        recentContainer.innerHTML = '<div class="empty-state"><p>No sessions yet. Start your first chat!</p></div>';
+        return;
+      }
+
+      const sessionsHtml = sessions.map(session => `
+        <div class="session-card">
+          <div class="session-info">
+            <div class="session-model">🤖 ${session.model_name}</div>
+            <div class="session-meta">
+              Started: ${new Date(session.start_time).toLocaleDateString()} | 
+              Status: <span style="color: ${session.status === 'active' ? '#4caf50' : '#aaa'}">${session.status}</span>
+            </div>
+          </div>
+          <div class="session-actions">
+            <button class="btn-small btn-resume" onclick="resumeChat(${session.id})">Resume</button>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = sessionsHtml;
+
+      // Show only recent 3 on dashboard
+      const recentSessions = sessions.slice(0, 3);
+      recentContainer.innerHTML = recentSessions.map(session => `
+        <div class="session-card">
+          <div class="session-info">
+            <div class="session-model">🤖 ${session.model_name}</div>
+            <div class="session-meta">${new Date(session.start_time).toLocaleDateString()}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateStats(sessions) {
+      document.getElementById('totalSessions').textContent = sessions.length;
+      
+      let totalSpent = 0;
+      let thisMonthSpent = 0;
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      sessions.forEach(session => {
+        if (session.total_cost) {
+          totalSpent += parseFloat(session.total_cost);
+          const sessionDate = new Date(session.created_at);
+          if (sessionDate.getMonth() === currentMonth && sessionDate.getFullYear() === currentYear) {
+            thisMonthSpent += parseFloat(session.total_cost);
+          }
+        }
+      });
+
+      document.getElementById('totalSpent').textContent = '$' + totalSpent.toFixed(2);
+      document.getElementById('monthlySpent').textContent = '$' + thisMonthSpent.toFixed(2);
+    }
+
+    async function loadModels() {
+      try {
+        const response = await fetch(`${API_URL}/models`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to load models');
+        }
+
+        displayModels(data.models);
+      } catch (error) {
+        console.error('Error loading models:', error);
+        document.getElementById('modelSelection').innerHTML = `<p style="color: #aaa;">Error loading models</p>`;
+      }
+    }
+
+    function displayModels(models) {
+      const container = document.getElementById('modelSelection');
+      
+      const modelsHtml = models.map(model => `
+        <div class="stat-card" style="cursor: pointer; text-align: center;" onclick="startChat('${model.id}')">
+          <div style="font-size: 2rem; margin-bottom: 10px;">🤖</div>
+          <div style="font-weight: 600; margin-bottom: 5px;">${model.name}</div>
+          <div style="font-size: 0.8rem; color: #aaa; margin-bottom: 10px;">${model.provider}</div>
+          <div style="font-size: 0.8rem; color: #888;">${model.description}</div>
+        </div>
+      `).join('');
+
+      container.innerHTML = modelsHtml;
+    }
+
+    async function startChat(modelId) {
+      try {
+        const response = await fetch(`${API_URL}/sessions/start`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ model: modelId })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to start session');
+        }
+
+        // Redirect to chat interface
+        localStorage.setItem('currentSession', JSON.stringify(data.session));
+        window.location.href = 'chat.html';
+      } catch (error) {
+        showNotification('Error: ' + error.message);
+      }
+    }
+
+    function resumeChat(sessionId) {
+      // For now, redirect to chat interface with session ID
+      localStorage.setItem('sessionId', sessionId);
+      window.location.href = 'chat.html';
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('currentSession');
+      window.location.href = 'auth.html';
+    }
+
+    function showNotification(message) {
+      const notif = document.getElementById('notification');
+      notif.textContent = message;
+      notif.classList.add('show');
+      setTimeout(() => notif.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>

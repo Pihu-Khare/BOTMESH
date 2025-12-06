@@ -2,79 +2,218 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bot Mesh - Choose AI Model</title>
+  <title>Bot Mesh - AI as a Service</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0f0f12;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0f12 0%, #1a1a2e 100%);
       color: #fff;
+    }
+
+    header {
+      padding: 20px 40px;
+      background: rgba(26, 26, 31, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
     }
-    h1 { font-size: 2.5rem; margin-bottom: 20px; }
-    .models {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      width: 80%;
-      max-width: 900px;
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
     }
-    .card {
-      background: #1a1a1f;
-      padding: 30px;
-      border-radius: 16px;
-      text-align: center;
+
+    .header-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
     }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 20px rgba(0, 255, 200, 0.4);
+
+    .btn-signin {
+      background: transparent;
+      border: 1px solid #00d1b2;
+      color: #00d1b2;
+    }
+
+    .btn-signin:hover {
+      background: #00d1b2;
+      color: #000;
+    }
+
+    .hero {
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #00d1b2, #00bfa5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00d1b2, #00bfa5);
+      color: #000;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 209, 178, 0.4);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto 80px;
+      padding: 0 40px;
+    }
+
+    .feature-card {
+      background: rgba(26, 26, 31, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 209, 178, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: #00d1b2;
+      box-shadow: 0 0 20px rgba(0, 209, 178, 0.2);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      color: #00d1b2;
+    }
+
+    .feature-card p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    footer {
+      background: rgba(26, 26, 31, 0.95);
+      padding: 40px;
+      text-align: center;
+      color: #aaa;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 80px;
     }
   </style>
 </head>
 <body>
-  <h1>🤖 Bot Mesh</h1>
-  <p>Select an AI Model to Begin</p>
+  <header>
+    <div class="logo">🤖 Bot Mesh</div>
+    <div class="header-buttons">
+      <a href="auth.html" class="btn btn-signin">Sign In</a>
+    </div>
+  </header>
 
-  <div class="models" id="modelList"></div>
+  <div class="hero">
+    <h1>AI as a Service Platform</h1>
+    <p>Access powerful AI models with flexible pay-as-you-go pricing. No setup required. Start chatting in seconds.</p>
+
+    <div class="cta-buttons">
+      <a href="auth.html" class="btn btn-primary">Get Started Free</a>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Fast & Reliable</h3>
+      <p>Instant access to latest AI models with 99.9% uptime. Real-time responses powered by industry-leading providers.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">💰</div>
+      <h3>Pay As You Go</h3>
+      <p>Transparent pricing. No hidden fees. You only pay for what you use. Starting at just $0.05 per minute.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Enterprise Grade</h3>
+      <p>Bank-level security with end-to-end encryption. GDPR compliant. Your data is always protected.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Multiple Models</h3>
+      <p>Choose from GPT-4, Claude 3, Gemini Pro, Mistral and more. Switch models mid-conversation.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Analytics Dashboard</h3>
+      <p>Track your usage, spending, and API calls. Detailed reports and insights for billing optimization.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🚀</div>
+      <h3>Easy Integration</h3>
+      <p>REST API with SDKs for Python, JavaScript, and more. Full documentation and code examples included.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Bot Mesh. All rights reserved. | <a href="#" style="color: #00d1b2; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #00d1b2; text-decoration: none;">Terms of Service</a></p>
+  </footer>
 
   <script>
-    async function loadModels() {
-      try {
-        let res = await fetch("http://localhost:5000/models");
-        if (!res.ok) throw new Error("Backend not ready");
-        let models = await res.json();
-        renderModels(models);
-      } catch (err) {
-        console.log("Using fallback models:", err);
-        renderModels(["GPT-5", "Claude", "LLaMA", "Gemini"]); // fallback
+    // Redirect to dashboard if already logged in
+    window.addEventListener('load', () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        window.location.href = 'dashboard.html';
       }
-    }
-
-    function renderModels(models) {
-      const container = document.getElementById("modelList");
-      container.innerHTML = "";
-      models.forEach(model => {
-        let div = document.createElement("div");
-        div.className = "card";
-        div.innerText = model;
-        div.onclick = () => chooseModel(model);
-        container.appendChild(div);
-      });
-    }
-
-    function chooseModel(model) {
-      localStorage.setItem("selectedModel", model);
-      window.location.href = "chat.html";
-    }
-
-    loadModels();
+    });
   </script>
 </body>
 </html>

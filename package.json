@@ -1,19 +1,37 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
+  "name": "bot-mesh",
+  "version": "1.0.0-phase1",
+  "description": "Bot Mesh - AI as a Service Platform",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "AI",
+    "ChatGPT",
+    "API",
+    "SaaS",
+    "Machine Learning"
+  ],
+  "author": "Pihu-Khare",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.5.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.16.3",
+    "sqlite3": "^5.1.7",
     "uuid": "^13.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }
